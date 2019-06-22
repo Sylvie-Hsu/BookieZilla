@@ -115,9 +115,9 @@ class BookList extends Component {
         }}
       >
         <Card.Content>
-          <Card.Header as="h1">Contract List</Card.Header>
+          <Card.Header as="h1">Book List</Card.Header>
           <Card.Meta>
-            <span>Recent editted contracts.</span>
+            <span>Recent published books.</span>
           </Card.Meta>
           <Card.Group
             style={{ justifyContent: "flex-start", margin: "10px 0 10px 0" }}
