@@ -4,8 +4,8 @@ const BookieZilla = db.BookieZilla;
 
 const User = BookieZilla.import(userModel);
 
-const getUserById = function*(id) {
-  const userInfo = yield User.findOne({
+const getUserById = async function(id) {
+  const userInfo = await User.findOne({
     where: {
       UserID: id
     }
