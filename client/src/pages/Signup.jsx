@@ -11,7 +11,7 @@ import {
 import Logo from "../images/logo.png";
 import { NavLink, withRouter } from "react-router-dom";
 
-class Login extends Component {
+class Signup extends Component {
   state = {};
   render() {
     return (
@@ -61,7 +61,7 @@ class Login extends Component {
           <Message>
             Already has account?
             <NavLink to="/">
-              <a href="#">Sign In</a>
+              <a href="#"> Sign In</a>
             </NavLink>
           </Message>
         </Grid.Column>
@@ -70,4 +70,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Signup);
