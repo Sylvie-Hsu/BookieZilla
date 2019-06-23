@@ -12,9 +12,6 @@ import {
 import { NavLink, withRouter } from "react-router-dom";
 import axios from "axios";
 import Logo from "../images/logo.png";
-import config from "../web.config.json";
-
-const api = config.api;
 
 class Login extends Component {
   state = {

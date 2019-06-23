@@ -1,5 +1,6 @@
 const user = require("../models/userModel.js");
-const jwt = require("koa-jwt");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const getUserInfo = async function(ctx) {
   const id = ctx.params.id;
@@ -12,7 +13,7 @@ const vertifyUserLogin = async function(ctx) {
   const userInfo = await user.getUserByEmail(data.email);
 
   if (userInfo != null) {
-    if (userInfo.UserPsw != data.psw) {
+    if (!bcrypt.compareSync(data.psw, userInfo.UserPsw)) {
       ctx.body = {
         status: false,
         msg: "Wrong password"

@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-ejs": "^4.2.0",
@@ -19,7 +21,8 @@
     "koa-router": "^7.4.0",
     "mysql": "^2.17.1",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.8.11"
+    "sequelize": "^5.8.11",
+    "util": "^0.12.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
