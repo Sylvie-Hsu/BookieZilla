@@ -10,10 +10,68 @@ import {
 } from "semantic-ui-react";
 import Logo from "../images/logo.png";
 import { NavLink, withRouter } from "react-router-dom";
+import axios from "axios";
 
 class Signup extends Component {
-  state = {};
+  state = {
+    email: "",
+    username: "",
+    psw: "",
+    pswConfirm: "",
+    alert: false,
+    load: false
+  };
+
+  vertifyFormat = () => {
+    var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    return (
+      pattern.test(this.state.email) &&
+      this.state.username != "" &&
+      this.state.psw === this.state.pswConfirm &&
+      this.state.psw.length >= 6
+    );
+  };
+
+  sendSignupRequest = () => {
+    if (this.vertifyFormat()) {
+      this.setState({
+        alert: false,
+        load: true
+      });
+      axios
+        .post("/auth/signup", {
+          email: this.state.email,
+          username: this.state.username,
+          psw: this.state.psw
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      this.setState({
+        alert: true
+      });
+    }
+  };
+
   render() {
+    var alert =
+      this.state.alert === false ? (
+        <div />
+      ) : (
+        <Message
+          error
+          header="Could you check something!"
+          list={[
+            "Email format must conform to the specification.",
+            "Username can not be empty.",
+            "Password must be at least six characters."
+          ]}
+        />
+      );
     return (
       <Grid
         textAlign="center"
@@ -25,19 +83,29 @@ class Signup extends Component {
             <Image src={Logo} />
             Welcome to B::kzilla
           </Header>
-          <Form size="large">
+          <Form size="large" error active>
             <Segment>
               <Form.Input
                 fluid
                 icon="user"
                 iconPosition="left"
                 placeholder="E-mail address"
+                onChange={event => {
+                  this.setState({
+                    email: event.target.value
+                  });
+                }}
               />
               <Form.Input
                 fluid
                 icon="lock"
                 iconPosition="left"
                 placeholder="Username"
+                onChange={event => {
+                  this.setState({
+                    username: event.target.value
+                  });
+                }}
               />
               <Form.Input
                 fluid
@@ -45,6 +113,11 @@ class Signup extends Component {
                 iconPosition="left"
                 placeholder="Password"
                 type="password"
+                onChange={event => {
+                  this.setState({
+                    psw: event.target.value
+                  });
+                }}
               />
               <Form.Input
                 fluid
@@ -52,8 +125,19 @@ class Signup extends Component {
                 iconPosition="left"
                 placeholder="Comfirm password"
                 type="password"
+                onChange={event => {
+                  this.setState({
+                    pswConfirm: event.target.value
+                  });
+                }}
               />
-              <Button color="teal" fluid size="large">
+              {alert}
+              <Button
+                color="teal"
+                fluid
+                size="large"
+                onClick={this.sendSignupRequest}
+              >
                 Sign Up
               </Button>
             </Segment>

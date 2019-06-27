@@ -1,6 +1,8 @@
 const db = require("../config/database.js");
 const userModel = "../schema/user.js";
 const BookieZilla = db.BookieZilla;
+const bcrypt = require("bcryptjs");
+const saltRounds = 10;
 
 const User = BookieZilla.import(userModel);
 
@@ -22,7 +24,22 @@ const getUserByEmail = async function(email) {
   return userInfo;
 };
 
+const insertNewUser = async function(data) {
+  data.id = parseInt(Math.random() * 999999, 10) + 1;
+  data.psw = bcrypt.hashSync(data.psw, saltRounds);
+  console.log(data);
+  const userInfo = await User.create({
+    UserID: data.id,
+    UserName: data.username,
+    UserPsw: data.psw,
+    UserEmail: data.email
+  });
+
+  return userInfo;
+};
+
 module.exports = {
   getUserById,
-  getUserByEmail
+  getUserByEmail,
+  insertNewUser
 };
