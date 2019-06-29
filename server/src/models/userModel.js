@@ -27,12 +27,13 @@ const getUserByEmail = async function(email) {
 const insertNewUser = async function(data) {
   data.id = parseInt(Math.random() * 999999, 10) + 1;
   data.psw = bcrypt.hashSync(data.psw, saltRounds);
-  console.log(data);
   const userInfo = await User.create({
     UserID: data.id,
     UserName: data.username,
     UserPsw: data.psw,
     UserEmail: data.email
+  }).catch(err => {
+    console.log("Error in insertNewUser:", err);
   });
 
   return userInfo;

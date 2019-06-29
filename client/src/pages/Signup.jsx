@@ -19,7 +19,12 @@ class Signup extends Component {
     psw: "",
     pswConfirm: "",
     alert: false,
-    load: false
+    load: false,
+    list: [
+      "Email format must conform to the specification.",
+      "Username can not be empty.",
+      "Password must be at least six characters."
+    ]
   };
 
   vertifyFormat = () => {
@@ -45,6 +50,16 @@ class Signup extends Component {
           psw: this.state.psw
         })
         .then(res => {
+          if (res.data.status == true) {
+          } else {
+            this.setState({
+              list: [
+                "Email address has already been registered.",
+                "Username can not be duplicate."
+              ],
+              alert: true
+            });
+          }
           console.log(res);
         })
         .catch(err => {
@@ -65,11 +80,7 @@ class Signup extends Component {
         <Message
           error
           header="Could you check something!"
-          list={[
-            "Email format must conform to the specification.",
-            "Username can not be empty.",
-            "Password must be at least six characters."
-          ]}
+          list={this.state.list}
         />
       );
     return (

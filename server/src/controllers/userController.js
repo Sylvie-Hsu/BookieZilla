@@ -57,7 +57,7 @@ const signupNewUser = async function(ctx) {
   } else {
     ctx.body = {
       status: false,
-      msg: "Fault"
+      msg: "Duplicate key"
     };
   }
 };
