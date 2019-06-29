@@ -10,6 +10,8 @@ import {
 } from "semantic-ui-react";
 import Logo from "../images/logo.png";
 import { NavLink, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { updateToken } from "../actions/UpdateActions";
 import axios from "axios";
 
 class Signup extends Component {
@@ -51,6 +53,8 @@ class Signup extends Component {
         })
         .then(res => {
           if (res.data.status == true) {
+            this.props.updateToken(res.data.token);
+            this.props.history.push("/home");
           } else {
             this.setState({
               list: [
@@ -165,4 +169,19 @@ class Signup extends Component {
   }
 }
 
-export default withRouter(Signup);
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateToken: token => {
+      dispatch(updateToken(token));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Signup));

@@ -10,6 +10,8 @@ import {
   Loader
 } from "semantic-ui-react";
 import { NavLink, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { updateToken } from "../actions/UpdateActions";
 import axios from "axios";
 import Logo from "../images/logo.png";
 
@@ -18,7 +20,11 @@ class Login extends Component {
     email: "",
     psw: "",
     alert: false,
-    load: false
+    load: false,
+    list: [
+      "Email format must conform to the specification.",
+      "Password must be at least six characters."
+    ]
   };
 
   vertifyFormat = () => {
@@ -39,6 +45,19 @@ class Login extends Component {
         })
         .then(res => {
           console.log(res);
+          if (res.data.status == true) {
+            this.props.updateToken(res.data.token);
+            this.props.history.push("/home");
+          } else {
+            this.setState({
+              list: [
+                "Wrong password, try again.",
+                "User does not exist, please click sign up."
+              ],
+              alert: true
+            });
+          }
+          console.log(res);
         })
         .catch(err => {
           console.log(err);
@@ -58,10 +77,7 @@ class Login extends Component {
         <Message
           error
           header="Could you check something!"
-          list={[
-            "Email format must conform to the specification.",
-            "Password must be at least six characters."
-          ]}
+          list={this.state.list}
         />
       );
     var load = this.state.load === false ? <div /> : <Loader />;
@@ -125,4 +141,19 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateToken: token => {
+      dispatch(updateToken(token));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Login));
