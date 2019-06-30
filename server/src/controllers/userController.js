@@ -27,6 +27,7 @@ const vertifyUserLogin = async function(ctx) {
       const token = jwt.sign(userToken, secret);
       ctx.body = {
         status: true,
+        id: userInfo.UserID,
         token: token
       };
     }
@@ -52,6 +53,7 @@ const signupNewUser = async function(ctx) {
     const token = jwt.sign(userToken, secret);
     ctx.body = {
       status: true,
+      id: userInfo.UserID,
       token: token
     };
   } else {

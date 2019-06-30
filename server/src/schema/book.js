@@ -14,11 +14,11 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       BookCostPrice: {
-        type: "DOUBLE",
+        type: "FLOAT",
         allowNull: true
       },
       BookSalePrice: {
-        type: "DOUBLE",
+        type: "FLOAT",
         allowNull: true
       },
       BookCategory: {
@@ -30,11 +30,15 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       BookContent: {
-        type: DataTypes.STRING(45),
+        type: DataTypes.STRING(300),
         allowNull: true
       },
       BookISBN: {
         type: DataTypes.STRING(45),
+        allowNull: true
+      },
+      BookRefs: {
+        type: DataTypes.STRING(300),
         allowNull: true
       }
     },

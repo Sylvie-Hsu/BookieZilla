@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import { NavLink, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { updateToken } from "../actions/UpdateActions";
+import { updateId, updateToken } from "../actions/UpdateActions";
 import axios from "axios";
 import Logo from "../images/logo.png";
 
@@ -46,6 +46,7 @@ class Login extends Component {
         .then(res => {
           console.log(res);
           if (res.data.status == true) {
+            this.props.updateId(res.data.id);
             this.props.updateToken(res.data.token);
             this.props.history.push("/home");
           } else {
@@ -149,6 +150,9 @@ const mapDispatchToProps = dispatch => {
   return {
     updateToken: token => {
       dispatch(updateToken(token));
+    },
+    updateId: id => {
+      dispatch(updateId(id));
     }
   };
 };

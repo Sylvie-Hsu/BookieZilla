@@ -25,7 +25,7 @@ const getUserByEmail = async function(email) {
 };
 
 const insertNewUser = async function(data) {
-  data.id = parseInt(Math.random() * 999999, 10) + 1;
+  data.id = parseInt(Math.random() * 999999, 10);
   data.psw = bcrypt.hashSync(data.psw, saltRounds);
   const userInfo = await User.create({
     UserID: data.id,

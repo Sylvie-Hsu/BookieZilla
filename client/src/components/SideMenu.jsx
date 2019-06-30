@@ -22,7 +22,7 @@ class SideMenu extends Component {
             B::kieZilla
           </Header>
         </div>
-        <NavLink to="/">
+        <NavLink to="/home">
           <Menu.Item as="a">
             <Icon name="home" />
             Home

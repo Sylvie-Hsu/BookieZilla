@@ -4,6 +4,7 @@ const logger = require("koa-logger");
 const KoaRouter = require("koa-router");
 const parser = require("koa-bodyparser");
 const auth = require("./src/routes/auth.js");
+const api = require("./src/routes/api.js");
 
 const app = new Koa();
 const router = new KoaRouter();
@@ -18,6 +19,7 @@ app.use(logger());
 
 // Router Middleware
 router.use("/auth", auth.routes());
+router.use("/api", api.routes());
 
 app.use(router.routes()).use(router.allowedMethods());
 
