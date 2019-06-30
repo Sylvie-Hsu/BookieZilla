@@ -99,28 +99,27 @@ class OrderInfo extends Component {
           }}
         >
           <Card.Content>
-            <Card.Header as="h1">{this.state.bookInfo.BookName}</Card.Header>
-            <Card.Meta>
-              <span>
-                You can know about the detailed information of the book here.
-              </span>
-            </Card.Meta>
-
             <Item style={{ margin: "10px 0 10px 0" }}>
               <Grid>
                 <Grid.Row columns={2}>
                   <Grid.Column width={5}>
                     <Image
-                      src={Pic}
+                      src={this.state.bookInfo.BookPhoto}
                       size="medium"
                       rounded
                       style={{ margin: "10px 0 10px 0" }}
                     />
                   </Grid.Column>
                   <Grid.Column width={10}>
+                    <Item.Header as="h1">
+                      {this.state.bookInfo.BookName}
+                    </Item.Header>
                     <Statistic.Group
                       size="tiny"
-                      style={{ justifyContent: "space-between" }}
+                      style={{
+                        justifyContent: "space-between",
+                        margin: "20px 0 10px 0"
+                      }}
                     >
                       <Statistic>
                         <Statistic.Value>
@@ -142,12 +141,12 @@ class OrderInfo extends Component {
                       </Statistic>
                     </Statistic.Group>
                     <List size="large">
-                      {/* <List.Item>
-                      <List.Icon name="book" />
-                      <List.Content>
-                        BookID:{this.state.bookInfo.BookID}
-                      </List.Content>
-                    </List.Item> */}
+                      <List.Item>
+                        <List.Icon name="book" />
+                        <List.Content>
+                          BookID:{this.state.bookInfo.BookID}
+                        </List.Content>
+                      </List.Item>
                       <List.Item>
                         <List.Icon name="file alternate" />
                         <List.Content>
@@ -182,11 +181,11 @@ class OrderInfo extends Component {
                       </List.Item>
                     </List>
                     <List size="large">
-                      <List.Item>
-                        <List.Header style={{ margin: "0 0 5px 0" }}>
+                      <List.Item style={{ margin: "20px 0 0 0" }}>
+                        <List.Header style={{ margin: "20px 0 10px 0" }}>
                           BookContent
                         </List.Header>
-                        <List.Content>
+                        <List.Content style={{ height: "80px" }}>
                           {this.state.bookInfo.BookContent}
                         </List.Content>
                       </List.Item>

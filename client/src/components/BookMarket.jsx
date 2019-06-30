@@ -56,26 +56,30 @@ class BookMarket extends Component {
       this.state.books.map(book => {
         return (
           <Item key={book.BookID}>
-            <Item.Image src="https://react.semantic-ui.com/images/avatar/large/molly.png" />
+            <Item.Image src={book.BookPhoto} size="small" />
             <Item.Content>
               <Item.Header as="a">{book.BookName}</Item.Header>
-              <Item.Meta>
-                <div style={{ margin: "0 0 7px 0" }}>
+              <Item.Meta style={{ margin: "20px 0 20px 0" }}>
+                <div style={{ margin: "0 0 10px 0" }}>
                   <span className="cinema">
                     Origin Price: ${book.BookCostPrice}
                   </span>
                 </div>
-                <div style={{ margin: "0 0 7px 0" }}>
+                <div style={{ margin: "0 0 10px 0" }}>
                   <span className="cinema">
                     Sale Price: ${book.BookSalePrice}
                   </span>
                 </div>
-                <div style={{ margin: "0 0 7px 0" }}>
+                <div style={{ margin: "0 0 10px 0" }}>
                   <span className="cinema">ISBN: {book.BookISBN}</span>
                 </div>
               </Item.Meta>
-              <Item.Description>{book.BookContent}</Item.Description>
-              <Item.Extra>
+              <Item.Description
+                style={{ margin: "20px 0 0 0", height: "75px" }}
+              >
+                {book.BookContent}
+              </Item.Description>
+              <Item.Extra style={{ margin: "0 0 0 0" }}>
                 <Link to={"/books/" + book.BookID}>
                   <Button primary floated="right">
                     More infos

@@ -22,7 +22,7 @@ class PublishForm extends Component {
     BookCostPrice: "",
     BookSalePrice: "",
     BookCategory: "",
-    BookPhoto: "",
+    BookPhoto: "https://react.semantic-ui.com/images/wireframe/image.png",
     BookContent: "",
     BookISBN: "",
     BookRefs: "",
@@ -111,13 +111,12 @@ class PublishForm extends Component {
               You can publish your book for a potential saler or buyer here.
             </span>
           </Card.Meta>
-
           <Form style={{ margin: "10px 0 10px 0" }}>
             <Grid>
               <Grid.Row columns={2}>
                 <Grid.Column width={5}>
                   <Image
-                    src={Pic}
+                    src={this.state.BookPhoto}
                     size="medium"
                     rounded
                     style={{ margin: "10px 0 10px 0" }}
@@ -196,13 +195,24 @@ class PublishForm extends Component {
                       }}
                     />
                     <Form.Input
-                      width={10}
+                      width={5}
                       fluid
                       label="Refs"
                       placeholder="Refs"
                       onChange={event => {
                         this.setState({
                           BookRefs: event.target.value
+                        });
+                      }}
+                    />
+                    <Form.Input
+                      width={5}
+                      fluid
+                      label="Photo"
+                      placeholder="PhotoLink"
+                      onChange={event => {
+                        this.setState({
+                          BookPhoto: event.target.value
                         });
                       }}
                     />
@@ -225,6 +235,7 @@ class PublishForm extends Component {
                   <Form.TextArea
                     label="About"
                     placeholder="Tell us more about the book..."
+                    style={{ height: "135px" }}
                     onChange={event => {
                       this.setState({
                         BookContent: event.target.value
