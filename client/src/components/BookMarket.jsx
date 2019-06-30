@@ -1,215 +1,80 @@
 import React, { Component } from "react";
-import { Button, Card, Image } from "semantic-ui-react";
+import { Button, Card, Image, Item, Label, Icon } from "semantic-ui-react";
+import axios from "axios";
+
+const paragraph = (
+  <Image src="https://react.semantic-ui.com/images/wireframe/short-paragraph.png" />
+);
 
 class BookMarket extends Component {
-  state = {};
+  state = {
+    books: []
+  };
+  componentDidMount() {
+    axios
+      .get("/api/getbooks")
+      .then(res => {
+        console.log(res.data);
+        this.setState({
+          books: res.data
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   render() {
     var cardWidth = document.body.clientWidth - 170;
+    const bookList = this.state.books.length ? (
+      this.state.books.map(book => {
+        return (
+          <Item key={book.BookID}>
+            <Item.Image src="https://react.semantic-ui.com/images/avatar/large/molly.png" />
+            <Item.Content>
+              <Item.Header as="a">{book.BookName}</Item.Header>
+              <Item.Meta>
+                <div style={{ margin: "0 0 7px 0" }}>
+                  <span className="cinema">
+                    Origin Price: ${book.BookCostPrice}
+                  </span>
+                </div>
+                <div style={{ margin: "0 0 7px 0" }}>
+                  <span className="cinema">
+                    Sale Price: ${book.BookSalePrice}
+                  </span>
+                </div>
+                <div style={{ margin: "0 0 7px 0" }}>
+                  <span className="cinema">ISBN: {book.BookISBN}</span>
+                </div>
+              </Item.Meta>
+              <Item.Description>{book.BookContent}</Item.Description>
+              <Item.Extra>
+                <Button primary floated="right">
+                  More infos
+                  <Icon name="right chevron" />
+                </Button>
+                <Label>{book.BookCategory}</Label>
+              </Item.Extra>
+            </Item.Content>
+          </Item>
+        );
+      })
+    ) : (
+      <div>No books yet</div>
+    );
     return (
       <Card style={{ width: cardWidth, display: "flex" }}>
         <Card.Content>
-          <Card.Header as="h1">New Contract</Card.Header>
-          <Card.Group style={{ justifyContent: "center" }}>
-            <Card>
-              <Card.Content>
-                <Image
-                  floated="right"
-                  size="mini"
-                  src="https://react.semantic-ui.com/images/avatar/large/steve.jpg"
-                />
-                <Card.Header>Dispatch Contract</Card.Header>
-                <Card.Meta>Contract of dispatch actions.</Card.Meta>
-                <Card.Description>
-                  This contract is used to dispatch action in{" "}
-                  <strong>different ways</strong>.
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button basic color="green">
-                    Approve
-                  </Button>
-                  <Button basic color="red">
-                    Decline
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-            <Card>
-              <Card.Content>
-                <Image
-                  floated="right"
-                  size="mini"
-                  src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-                />
-                <Card.Header>Transfer Contract</Card.Header>
-                <Card.Meta>Contract of assets transfer.</Card.Meta>
-                <Card.Description>
-                  This contract is used to transfer assets which assure{" "}
-                  <strong>security</strong>.
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button basic color="green">
-                    Approve
-                  </Button>
-                  <Button basic color="red">
-                    Decline
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-            <Card>
-              <Card.Content>
-                <Image
-                  floated="right"
-                  size="mini"
-                  src="https://react.semantic-ui.com/images/avatar/large/jenny.jpg"
-                />
-                <Card.Header>New Contract</Card.Header>
-                <Card.Meta>Contract of dispatch actions.</Card.Meta>
-                <Card.Description>
-                  This contract is used to dispatch action in{" "}
-                  <strong>different ways</strong>.
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button basic color="green">
-                    Approve
-                  </Button>
-                  <Button basic color="red">
-                    Decline
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-            <Card>
-              <Card.Content>
-                <Image
-                  floated="right"
-                  size="mini"
-                  src="https://react.semantic-ui.com/images/avatar/large/steve.jpg"
-                />
-                <Card.Header>Transfer Contract</Card.Header>
-                <Card.Meta>Contract of assets transfer.</Card.Meta>
-                <Card.Description>
-                  This contract is used to transfer assets which assure{" "}
-                  <strong>security</strong>.
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button basic color="green">
-                    Approve
-                  </Button>
-                  <Button basic color="red">
-                    Decline
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-            <Card>
-              <Card.Content>
-                <Image
-                  floated="right"
-                  size="mini"
-                  src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-                />
-                <Card.Header>Center Contract</Card.Header>
-                <Card.Meta>Contract of dispatch actions.</Card.Meta>
-                <Card.Description>
-                  This contract is used to dispatch action in{" "}
-                  <strong>different ways</strong>.
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button basic color="green">
-                    Approve
-                  </Button>
-                  <Button basic color="red">
-                    Decline
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-            <Card>
-              <Card.Content>
-                <Image
-                  floated="right"
-                  size="mini"
-                  src="https://react.semantic-ui.com/images/avatar/large/jenny.jpg"
-                />
-                <Card.Header>Transfer Contract</Card.Header>
-                <Card.Meta>Contract of assets transfer.</Card.Meta>
-                <Card.Description>
-                  This contract is used to transfer assets which assure{" "}
-                  <strong>security</strong>.
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button basic color="green">
-                    Approve
-                  </Button>
-                  <Button basic color="red">
-                    Decline
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-            <Card>
-              <Card.Content>
-                <Image
-                  floated="right"
-                  size="mini"
-                  src="https://react.semantic-ui.com/images/avatar/large/steve.jpg"
-                />
-                <Card.Header>Token Contract</Card.Header>
-                <Card.Meta>Contract of dispatch actions.</Card.Meta>
-                <Card.Description>
-                  This contract is used to dispatch action in{" "}
-                  <strong>different ways</strong>.
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button basic color="green">
-                    Approve
-                  </Button>
-                  <Button basic color="red">
-                    Decline
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-            <Card>
-              <Card.Content>
-                <Image
-                  floated="right"
-                  size="mini"
-                  src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-                />
-                <Card.Header>Transfer Contract</Card.Header>
-                <Card.Meta>Contract of assets transfer.</Card.Meta>
-                <Card.Description>
-                  This contract is used to transfer assets which assure{" "}
-                  <strong>security</strong>.
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button basic color="green">
-                    Approve
-                  </Button>
-                  <Button basic color="red">
-                    Decline
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
+          <Card.Header as="h1" style={{ margin: "5px 0 30px 0" }}>
+            Newly Publish Books
+          </Card.Header>
+          <Card.Group
+            style={{ justifyContent: "center", margin: "0 0 20px 0" }}
+          >
+            <Item.Group divided style={{ width: cardWidth - 200 }}>
+              {bookList}
+            </Item.Group>
           </Card.Group>
         </Card.Content>
       </Card>

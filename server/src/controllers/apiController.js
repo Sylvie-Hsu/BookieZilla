@@ -1,6 +1,11 @@
 const book = require("../models/bookModel.js");
 const order = require("../models/orderModel.js");
 
+const getAllBooks = async function(ctx) {
+  const books = await book.getAllBooks();
+  ctx.body = books;
+};
+
 const publishNewBook = async function(ctx) {
   const data = ctx.request.body;
   const bookInfo = await book.insertNewBook(data);
@@ -21,5 +26,6 @@ const publishNewBook = async function(ctx) {
 };
 
 module.exports = {
-  publishNewBook
+  publishNewBook,
+  getAllBooks
 };

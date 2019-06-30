@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       BookContent: {
-        type: DataTypes.STRING(300),
+        type: DataTypes.STRING(1000),
         allowNull: true
       },
       BookISBN: {
@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       BookRefs: {
-        type: DataTypes.STRING(300),
+        type: DataTypes.STRING(500),
         allowNull: true
       }
     },

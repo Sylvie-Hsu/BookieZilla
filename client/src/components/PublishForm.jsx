@@ -95,6 +95,7 @@ class PublishForm extends Component {
           content="Please wait for some minutes and try again."
         />
       );
+    console.log(this.props);
     return (
       <Card
         style={{
