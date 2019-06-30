@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Input, Icon, Search } from "semantic-ui-react";
+import { Card, Input, Icon, Search, Button } from "semantic-ui-react";
 
 class SearchBar extends Component {
   state = {};
@@ -9,12 +9,13 @@ class SearchBar extends Component {
       <Card style={{ width: cardWidth, display: "flex" }}>
         <Card.Content>
           <Input
-            focus
+            rounded
             placeholder="Search..."
             style={{ width: cardWidth - 100 }}
-          >
+          />
+          <Button icon style={{ margin: "0 0 0 10px" }}>
             <Icon name="search" />
-          </Input>
+          </Button>
         </Card.Content>
       </Card>
     );

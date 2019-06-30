@@ -6,6 +6,12 @@ const getAllBooks = async function(ctx) {
   ctx.body = books;
 };
 
+const searchBooks = async function(ctx) {
+  const data = ctx.request.body.info;
+  const books = await book.searchBooks(data);
+  ctx.body = books;
+};
+
 const getOrderInfo = async function(ctx) {
   const bookid = ctx.params.id;
   const bookInfo = await book.getBookById(bookid);
@@ -48,5 +54,6 @@ module.exports = {
   publishNewBook,
   getAllBooks,
   getOrderInfo,
-  updateOrderOfTrade
+  updateOrderOfTrade,
+  searchBooks
 };

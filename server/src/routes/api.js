@@ -3,6 +3,7 @@ const router = require("koa-router")();
 
 router.get("/getbooks", api.getAllBooks);
 router.get("/getorder/:id", api.getOrderInfo);
+router.post("/searchbooks", api.searchBooks);
 router.post("/publish", api.publishNewBook);
 router.post("/confirmorder", api.updateOrderOfTrade);
 

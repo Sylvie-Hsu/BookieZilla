@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { Button, Card, Image, Item, Label, Icon } from "semantic-ui-react";
+import {
+  Button,
+  Card,
+  Image,
+  Item,
+  Label,
+  Icon,
+  Input
+} from "semantic-ui-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -9,7 +17,8 @@ const paragraph = (
 
 class BookMarket extends Component {
   state = {
-    books: []
+    books: [],
+    search: ""
   };
   componentDidMount() {
     axios
@@ -24,6 +33,22 @@ class BookMarket extends Component {
         console.log(err);
       });
   }
+
+  searchBook = () => {
+    axios
+      .post("/api/searchbooks", {
+        info: this.state.search
+      })
+      .then(res => {
+        console.log(res.data);
+        this.setState({
+          books: res.data
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   render() {
     var cardWidth = document.body.clientWidth - 170;
@@ -67,20 +92,43 @@ class BookMarket extends Component {
       <div>No books yet</div>
     );
     return (
-      <Card style={{ width: cardWidth, display: "flex" }}>
-        <Card.Content>
-          <Card.Header as="h1" style={{ margin: "5px 0 30px 0" }}>
-            Newly Publish Books
-          </Card.Header>
-          <Card.Group
-            style={{ justifyContent: "center", margin: "0 0 20px 0" }}
-          >
-            <Item.Group divided style={{ width: cardWidth - 200 }}>
-              {bookList}
-            </Item.Group>
-          </Card.Group>
-        </Card.Content>
-      </Card>
+      <div>
+        <Card style={{ width: cardWidth, display: "flex" }}>
+          <Card.Content>
+            <Input
+              rounded
+              placeholder="Search..."
+              style={{ width: cardWidth - 80 }}
+              onChange={event => {
+                this.setState({
+                  search: event.target.value
+                });
+              }}
+            />
+            <Button
+              icon
+              style={{ margin: "0 0 0 10px" }}
+              onClick={this.searchBook}
+            >
+              <Icon name="search" />
+            </Button>
+          </Card.Content>
+        </Card>
+        <Card style={{ width: cardWidth, display: "flex" }}>
+          <Card.Content>
+            <Card.Header as="h1" style={{ margin: "5px 0 30px 0" }}>
+              Newly Publish Books
+            </Card.Header>
+            <Card.Group
+              style={{ justifyContent: "center", margin: "0 0 20px 0" }}
+            >
+              <Item.Group divided style={{ width: cardWidth - 200 }}>
+                {bookList}
+              </Item.Group>
+            </Card.Group>
+          </Card.Content>
+        </Card>
+      </div>
     );
   }
 }

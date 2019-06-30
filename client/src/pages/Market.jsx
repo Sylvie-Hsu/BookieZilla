@@ -7,7 +7,7 @@ class Market extends Component {
   render() {
     return (
       <div>
-        <SearchBar />
+        {/* <SearchBar /> */}
         <BookMarket />
       </div>
     );

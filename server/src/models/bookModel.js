@@ -4,6 +4,9 @@ const BookieZilla = db.BookieZilla;
 
 const Book = BookieZilla.import(bookModel);
 
+var Sequelize = require("sequelize");
+var Op = Sequelize.Op;
+
 const getAllBooks = async function() {
   var result;
   const data = await Book.findAll()
@@ -23,6 +26,34 @@ const getBookById = async function(id) {
     }
   });
   return BookInfo;
+};
+
+const searchBooks = async function(data) {
+  console.log(data);
+  const books = await Book.findAll({
+    where: {
+      [Op.or]: [
+        {
+          BookName: {
+            [Op.like]: "%" + data + "%"
+          }
+        },
+        {
+          BookCategory: {
+            [Op.like]: "%" + data + "%"
+          }
+        },
+        {
+          BookISBN: {
+            [Op.like]: "%" + data + "%"
+          }
+        }
+      ]
+    }
+  }).catch(err => {
+    console.log("Error in searchBooks:", err);
+  });
+  return books;
 };
 
 const insertNewBook = async function(data) {
@@ -46,5 +77,6 @@ const insertNewBook = async function(data) {
 module.exports = {
   insertNewBook,
   getAllBooks,
-  getBookById
+  getBookById,
+  searchBooks
 };
