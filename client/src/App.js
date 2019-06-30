@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Market from "./pages/Market";
 import Publish from "./pages/Publish";
 import Message from "./pages/Message";
+import OrderInfo from "./components/OrderInfo";
 
 class App extends Component {
   render() {
@@ -27,6 +28,7 @@ class App extends Component {
                 <Route path="/market" component={Market} />
                 <Route path="/publish" component={Publish} />
                 <Route path="/message" component={Message} />
+                <Route path="/books/:book_id" component={OrderInfo} />
               </div>
             </div>
           </Switch>

@@ -6,6 +6,25 @@ const getAllBooks = async function(ctx) {
   ctx.body = books;
 };
 
+const getOrderInfo = async function(ctx) {
+  const bookid = ctx.params.id;
+  const bookInfo = await book.getBookById(bookid);
+  const orderInfo = await order.getOrderById(bookid);
+  ctx.body = {
+    bookInfo: bookInfo,
+    orderInfo: orderInfo
+  };
+};
+
+const updateOrderOfTrade = async function(ctx) {
+  const data = ctx.request.body;
+  const orderInfo = await order.updateOrderOfTrade(data);
+  ctx.body = {
+    status: true,
+    orderInfo: orderInfo
+  };
+};
+
 const publishNewBook = async function(ctx) {
   const data = ctx.request.body;
   const bookInfo = await book.insertNewBook(data);
@@ -27,5 +46,7 @@ const publishNewBook = async function(ctx) {
 
 module.exports = {
   publishNewBook,
-  getAllBooks
+  getAllBooks,
+  getOrderInfo,
+  updateOrderOfTrade
 };

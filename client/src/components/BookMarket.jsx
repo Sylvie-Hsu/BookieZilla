@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Card, Image, Item, Label, Icon } from "semantic-ui-react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const paragraph = (
   <Image src="https://react.semantic-ui.com/images/wireframe/short-paragraph.png" />
@@ -50,10 +51,12 @@ class BookMarket extends Component {
               </Item.Meta>
               <Item.Description>{book.BookContent}</Item.Description>
               <Item.Extra>
-                <Button primary floated="right">
-                  More infos
-                  <Icon name="right chevron" />
-                </Button>
+                <Link to={"/books/" + book.BookID}>
+                  <Button primary floated="right">
+                    More infos
+                    <Icon name="right chevron" />
+                  </Button>
+                </Link>
                 <Label>{book.BookCategory}</Label>
               </Item.Extra>
             </Item.Content>

@@ -16,6 +16,15 @@ const getAllBooks = async function() {
   return result;
 };
 
+const getBookById = async function(id) {
+  const BookInfo = await Book.findOne({
+    where: {
+      BookID: id
+    }
+  });
+  return BookInfo;
+};
+
 const insertNewBook = async function(data) {
   data.BookID = parseInt(Math.random() * 999999999, 10);
   const bookInfo = await Book.create({
@@ -36,5 +45,6 @@ const insertNewBook = async function(data) {
 
 module.exports = {
   insertNewBook,
-  getAllBooks
+  getAllBooks,
+  getBookById
 };
