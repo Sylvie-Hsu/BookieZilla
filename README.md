@@ -15,68 +15,23 @@
 > 7. 界面样式需要适配PC和手机的浏览器。
 > 8.  实现一个Android或iphone客户端软件，功能同网站，额外支持定位功能，发布时记录位置，可以根据用户的位置匹配最近的待售书籍。消息和订单支持推送。
 
-## 设计原理
+## 技术选型
 
 ### 数据库
 
+![1561976460380](assets/1561976460380.png)
+
 数据库使用MySQL进行开发，因为环境之前都已经配好了(￣▽￣)"
 
-#### User
-
-| *UserID | UserName    | UserPsw     | *UserEmail  |
-| ------- | ----------- | ----------- | ----------- |
-| INT     | VARCHAR(45) | VARCHAR(45) | VARCHAR(45) |
-
-```mysql
-CREATE TABLE `bookiezilla`.`user` (
-  `UserID` INT NOT NULL,
-  `UserName` VARCHAR(45) NULL,
-  `UserPsw` VARCHAR(45) NULL,
-  `UserEmail` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`UserID`, `UserEmail`));
-```
-
-#### Book
-
-| *BookID | BookName    | BookCostPrice | BookSalePrice | BookCategory | BookPhoto   | BookContent | BookISBN    | BookRefs    |
-| ------- | ----------- | ------------- | ------------- | ------------ | ----------- | ----------- | ----------- | ----------- |
-| INT     | VARCHAR(45) | DOUBLE        | DOUBLE        | VARCHAR(45)  | VARCHAR(45) | VARCHAR(45) | VARCHAR(45) | VARCHAR(45) |
-
-```mysql
-CREATE TABLE `bookiezilla`.`book` (
-  `BookID` INT NOT NULL,
-  `BookName` VARCHAR(45) NULL,
-  `BookCostPrice` DOUBLE NULL,
-  `BookSalePrice` DOUBLE NULL,
-  `BookCategory` VARCHAR(45) NULL,
-  `BookPhoto` VARCHAR(45) NULL,
-  `BookContent` VARCHAR(45) NULL,
-  `BookISBN` VARCHAR(45) NULL,
-  PRIMARY KEY (`BookID`));
-```
-
-#### Order
-
-| *OrderID | *UserID | *BookID | TradeMethod | TradeStatus | TradeParty  | TraderID |
-| -------- | ------- | ------- | ----------- | ----------- | ----------- | -------- |
-| INT      | INT     | INT     | VARCHAR(45) | VARCHAR(45) | VARCHAR(45) | INT      |
-
-```mysql
-CREATE TABLE `bookiezilla`.`order` (
-  `OrderID` INT NOT NULL,
-  `UserID` INT NOT NULL,
-  `BookID` INT NOT NULL,
-  `TradeMethod` VARCHAR(45) NULL,
-  `TradeStatus` VARCHAR(45) NULL,
-  `TraderID` INT NULL,
-  PRIMARY KEY (`OrderID`));
-```
-
 ### 后端
+
+![Image result for koa.js](assets/1_KV5Uyy1RYBh4TKvivBUAgQ.jpeg)
 
 经过Express和Koa比对，最终选择Koa作为基于Node.js的Web开发框架。Koa是一个新的web框架，由Express幕后原班人马打造，语法上也使用了ES6新的语法（例如丢弃了回调函数而使用async解决异步调用问题），看起来十分优雅o(*￣▽￣*)o
 
 ### 前端
+
+![1561976126427](assets/1561976126427.png)
 
 采用React+Semantic UI，由于之前对React有足够多的实践，因此本次重点还是放在后端开发及前后端连接上……
 
@@ -338,26 +293,26 @@ CREATE TABLE `bookiezilla`.`order` (
 
 2. `server\src\controller\userController.js`增加方法，用于验证登录信息并将结果以`json`形式返回给前端。
 
-   > 注意此处实际上应用了JSON-WEB-TOKEN实现无状态请求，关于`jwt`的原理和实现方法请参考[这篇文章](http://blog.leapoahead.com/2015/09/07/user-authentication-with-jwt/?utm_source=tuicool&utm_medium=referral)和[这篇文章](https://segmentfault.com/a/1190000005783306)。
-   >
-   > 简单来说，运用了JSON-WEB-TOKEN的登录系统应该是这样的：
-   >
-   > 1. 用户在登录页输入账号密码，将账号密码（密码进行md5加密）发送请求给后端
-   > 2. 后端验证一下用户的账号和密码的信息，如果符合，就下发一个TOKEN返回给客户端。如果不符合就不发送TOKEN回去，返回验证错误信息。
-   > 3. 如果登录成功，客户端将TOKEN用某种方式存下来（SessionStorage、LocalStorage）,之后要请求其他资源的时候，在请求头（Header）里带上这个TOKEN进行请求。
-   > 4. 后端收到请求信息，先验证一下TOKEN是否有效，有效则下发请求的资源，无效则返回验证错误。
-   >
-   > 使用前需要安装相应库：
-   >
-   > ```
-   > npm i koa-jwt jsonwebtoken util -s
-   > ```
+   注意此处实际上应用了JSON-WEB-TOKEN实现无状态请求，关于`jwt`的原理和实现方法请参考[这篇文章](http://blog.leapoahead.com/2015/09/07/user-authentication-with-jwt/?utm_source=tuicool&utm_medium=referral)和[这篇文章](https://segmentfault.com/a/1190000005783306)。
+   
+   简单来说，运用了JSON-WEB-TOKEN的登录系统应该是这样的：
+   
+   - 用户在登录页输入账号密码，将账号密码（密码进行md5加密）发送请求给后端
+   - 后端验证一下用户的账号和密码的信息，如果符合，就下发一个TOKEN返回给客户端。如果不符合就不发送TOKEN回去，返回验证错误信息。
+   - 如果登录成功，客户端将TOKEN用某种方式存下来（SessionStorage、LocalStorage）,之后要请求其他资源的时候，在请求头（Header）里带上这个TOKEN进行请求。
+   - 后端收到请求信息，先验证一下TOKEN是否有效，有效则下发请求的资源，无效则返回验证错误。
+   
+   使用前需要安装相应库：
+   
+   ```
+   npm i koa-jwt jsonwebtoken util -s
+   ```
 
-   > 此外，为保证安全性，后端数据库的密码不能采用明文保存，此处使用`bcrypt`的加密方式。
-   >
-   > ```
-   > npm i bcryptjs -s
-   > ```
+   此外，为保证安全性，后端数据库的密码不能采用明文保存，此处使用`bcrypt`的加密方式。
+   
+   ```
+   npm i bcryptjs -s
+   ```
 
    ```js
    const user = require("../models/userModel.js");
@@ -615,12 +570,64 @@ export default withRouter(Login);
 
    ![1561289529393](assets/1561289529393.png)
 
+## 设计原理
 
-## 实现效果
+### 数据库
 
-### 项目结构
+#### User
 
-#### Client
+| *UserID | UserName    | UserPsw     | *UserEmail  |
+| ------- | ----------- | ----------- | ----------- |
+| INT     | VARCHAR(45) | VARCHAR(45) | VARCHAR(45) |
+
+```mysql
+CREATE TABLE `bookiezilla`.`user` (
+  `UserID` INT NOT NULL,
+  `UserName` VARCHAR(45) NULL,
+  `UserPsw` VARCHAR(45) NULL,
+  `UserEmail` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`UserID`, `UserEmail`));
+```
+
+#### Book
+
+| *BookID | BookName    | BookCostPrice | BookSalePrice | BookCategory | BookPhoto   | BookContent | BookISBN    | BookRefs    |
+| ------- | ----------- | ------------- | ------------- | ------------ | ----------- | ----------- | ----------- | ----------- |
+| INT     | VARCHAR(45) | DOUBLE        | DOUBLE        | VARCHAR(45)  | VARCHAR(45) | VARCHAR(45) | VARCHAR(45) | VARCHAR(45) |
+
+```mysql
+CREATE TABLE `bookiezilla`.`book` (
+  `BookID` INT NOT NULL,
+  `BookName` VARCHAR(45) NULL,
+  `BookCostPrice` DOUBLE NULL,
+  `BookSalePrice` DOUBLE NULL,
+  `BookCategory` VARCHAR(45) NULL,
+  `BookPhoto` VARCHAR(45) NULL,
+  `BookContent` VARCHAR(45) NULL,
+  `BookISBN` VARCHAR(45) NULL,
+  PRIMARY KEY (`BookID`));
+```
+
+#### Order
+
+| *OrderID | *UserID | *BookID | TradeMethod | TradeStatus | TradeParty  | TraderID |
+| -------- | ------- | ------- | ----------- | ----------- | ----------- | -------- |
+| INT      | INT     | INT     | VARCHAR(45) | VARCHAR(45) | VARCHAR(45) | INT      |
+
+```mysql
+CREATE TABLE `bookiezilla`.`order` (
+  `OrderID` INT NOT NULL,
+  `UserID` INT NOT NULL,
+  `BookID` INT NOT NULL,
+  `TradeMethod` VARCHAR(45) NULL,
+  `TradeStatus` VARCHAR(45) NULL,
+  `TraderID` INT NULL,
+  PRIMARY KEY (`OrderID`));
+```
+
+### 前端
+
+#### 目录结构
 
 ```js
 .
@@ -630,7 +637,7 @@ export default withRouter(Login);
 │  README.md
 │  yarn.lock
 │
-├─config
+├─config // 基本配置文件
 │  │  env.js
 │  │  modules.js
 │  │  paths.js
@@ -647,23 +654,23 @@ export default withRouter(Login);
 │      index.html
 │      manifest.json
 │
-├─scripts
+├─scripts // eject后生成的文件配置
 │      build.js
 │      start.js
 │      test.js
 │
-└─src
+└─src // 主要页面及组件部分
     │  App.css
     │  App.js
     │  index.css
     │  index.js
     │  serviceWorker.js
-    │  setupProxy.js
+    │  setupProxy.js // 设置代理转发，解决跨域问题
     │
-    ├─actions
+    ├─actions // react-redux需要定义的actions
     │      UpdateActions.js
     │
-    ├─components
+    ├─components // 页面的组件部分
     │      BookList.jsx
     │      BookMarket.jsx
     │      FeedBack.jsx
@@ -674,11 +681,11 @@ export default withRouter(Login);
     │      StatisticData.jsx
     │      StepFlow.jsx
     │
-    ├─images
+    ├─images // 项目中使用的图片资源
     │      logo.png
     │      matthew.png
     │
-    ├─pages
+    ├─pages // 页面部分
     │      Home.jsx
     │      Login.jsx
     │      Market.jsx
@@ -686,11 +693,241 @@ export default withRouter(Login);
     │      Publish.jsx
     │      Signup.jsx
     │
-    └─reducers
+    └─reducers // react-redux需要定义的reducers
             rootReducer.js    
 ```
 
-#### Server
+#### 实现细节
+
+##### React-router
+
+项目中使用了`react-router`来控制路由，基本原理如下：
+
+1. 在`App.js`中引入路由对应的页面或组件，并引入`react-router-dom`中的`BrowserRouter`、`Route`、`Switch`组件进行定义。
+
+   ```js
+   // App.jsx
+   
+   import React, { Component } from "react";
+   import { BrowserRouter, Route, Switch } from "react-router-dom";
+   
+   import SideMenu from "./components/SideMenu";
+   import Login from "./pages/Login";
+   import Signup from "./pages/Signup";
+   import Home from "./pages/Home";
+   import Market from "./pages/Market";
+   import Publish from "./pages/Publish";
+   import Message from "./pages/Message";
+   import OrderInfo from "./components/OrderInfo";
+   
+   class App extends Component {
+     render() {
+       return (
+         <BrowserRouter>
+           <div className="App">
+             <Switch>
+               <Route exact path="/" component={Login} />
+               <Route path="/signup" component={Signup} />
+               <div>
+                 <div>
+                   <SideMenu />
+                 </div>
+                 <div style={{ margin: "10px 10px 10px 160px" }}>
+                   {/* Only match one */}
+                   <Route path="/home" component={Home} />
+                   <Route path="/market" component={Market} />
+                   <Route path="/publish" component={Publish} />
+                   <Route path="/message" component={Message} />
+                   <Route path="/books/:book_id" component={OrderInfo} />
+                 </div>
+               </div>
+             </Switch>
+           </div>
+         </BrowserRouter>
+       );
+     }
+   }
+   
+   export default App;
+   
+   ```
+
+2. 当项目页面中需要进行页面跳转时，可使用`react-router-dom`中的`withRouter`将组件包裹起来，再使用`NavLink`进行跳转。
+
+   ```js
+   // Login.jsx
+   
+   import { NavLink, withRouter } from "react-router-dom";
+   
+   class Login extends Component {
+     .....
+     sendLoginRequest = () => {
+       ......
+       this.props.history.push("/home");
+       render(){
+          ......
+       }
+     };
+   
+   export default withRouter(Login);
+   
+   ```
+
+##### React-redux
+
+![Redux](assets/Redux.png)
+
+![Redussx](assets/Redussx-1561982861739.png)
+
+本项目中采用了`react-redux`进行状态管理，redux的主要作用是允许状态在不同分支的组件中进行传递，从而避免了使用原始方法（如`this.props`）导致的不同分支组件之间数据无法传递、子组件无法修改父组件状态等问题。具体使用方法如下：
+
+1. 在`src\reducers`下新建文件`rootReducer.js`用于更新中心状态树中的信息。
+
+   ```js
+   // rootReducer.js
+   
+   const initState = {
+     id: null,
+     token: null
+   };
+   
+   const rootReducer = (state = initState, action) => {
+     if (action.type === "UPDATE_ID") {
+       return {
+         ...state,
+         id: action.id
+       };
+     }
+     if (action.type === "UPDATE_TOKEN") {
+       return {
+         ...state,
+         token: action.token
+       };
+     }
+     return state;
+   };
+   
+   export default rootReducer;
+   ```
+
+2. 在`src\actions`中新建文件`UpdateActions.js`用于定义行为。
+
+   ```js
+   // UpdateActions.js
+   
+   export const updateId = id => {
+     return {
+       type: "UPDATE_ID",
+       id: id
+     };
+   };
+   
+   export const updateToken = token => {
+     return {
+       type: "UPDATE_TOKEN",
+       token: token
+     };
+   };
+   ```
+
+3. 在`src\index.js`中使用`react-redux`中的组件对项目入口文件进行包裹，并在全局范围内建立状态树。
+
+   ```js
+   // index.js
+   
+   import React from "react";
+   import ReactDOM from "react-dom";
+   import "./index.css";
+   import App from "./App";
+   import * as serviceWorker from "./serviceWorker";
+   import "semantic-ui-css/semantic.min.css";
+   import { createStore } from "redux";
+   import { Provider } from "react-redux";
+   import rootReducer from "./reducers/rootReducer";
+   
+   const store = createStore(rootReducer);
+   
+   ReactDOM.render(
+     <Provider store={store}>
+       <App />,
+     </Provider>,
+     document.getElementById("root")
+   );
+   
+   // If you want your app to work offline and load faster, you can change
+   // unregister() to register() below. Note this comes with some pitfalls.
+   // Learn more about service workers: https://bit.ly/CRA-PWA
+   serviceWorker.unregister();
+   
+   ```
+
+4. 当需要更新状态树中的信息时，使用引入的`action`作为函数进行更新。
+
+   ```js
+   // Login.jsx
+   
+   import { connect } from "react-redux";
+   import { updateId, updateToken } from "../actions/UpdateActions";
+   
+   class Login extends Component {
+     ......  
+     sendLoginRequest = () => {
+       ......
+       this.props.updateId(res.data.id);
+       this.props.updateToken(res.data.token);
+       ......
+     };  
+   }
+   
+   const mapStateToProps = state => {
+     return {};
+   };
+   
+   const mapDispatchToProps = dispatch => {
+     return {
+       updateToken: token => {
+         dispatch(updateToken(token));
+       },
+       updateId: id => {
+         dispatch(updateId(id));
+       }
+     };
+   };
+   
+   export default connect(
+     mapStateToProps,
+     mapDispatchToProps
+   )(withRouter(Login));
+   
+   ```
+
+5. 当需要使用状态树中的信息时，先调用`react-redux`中的`connect`包裹组件，再使用`this.props`直接调用即可。
+
+   ```js
+   // PublishForm.jsx
+   
+   import { connect } from "react-redux";
+   
+   class PublishForm extends Component {
+       ......
+       var UserID = this.props.id;
+   	var UserToken = this.props.token;
+   	......
+   }
+       
+   const mapStateToProps = state => {
+     return {
+       id: state.id,
+       token: state.token
+     };
+   };
+   
+   export default connect(mapStateToProps)(PublishForm);
+   ```
+
+### 后端
+
+#### 目录结构
 
 ```js
 .
@@ -699,33 +936,114 @@ export default withRouter(Login);
 │  package.json
 │
 └─src
-    ├─config
+    ├─config // 数据库配置
     │      database.js
     │
-    ├─controllers
+    ├─controllers // 控制器，获取请求数据并调用models中的方法进行处理并返回结果
     │      apiController.js
     │      msgController.js
     │      userController.js
     │
-    ├─models
+    ├─models // 实例模型，主要使用Sequelize定义的方法对数据库进行增删改查
     │      bookModel.js
     │      CommentModel.js
     │      orderModel.js
     │      userModel.js
     │
-    ├─routes
+    ├─routes // 路由，不同文件对应不同类型的api接口，分别与授权、功能实现、信息传递有关
     │      api.js
     │      auth.js
     │      msg.js
     │
-    └─schema
+    └─schema // 数据库表结构，可使用Sequelize自动生成
             book.js
             comment.js
             order.js
             user.js
 ```
 
-### 功能展示
+#### 实现细节
+
+##### 路由挂载
+
+当Koa后端监听的端口接收到请求时，会根据`app.js`中的路由规则进行处理，我们将不同类型的接口定义在不同文件中，再通过`router.use()`进行调用，避免发生接口冗乱复杂的情况。
+
+```js
+// app.js
+
+const Koa = require("koa");
+const json = require("koa-json");
+const logger = require("koa-logger");
+const KoaRouter = require("koa-router");
+const parser = require("koa-bodyparser");
+const auth = require("./src/routes/auth.js");
+const api = require("./src/routes/api.js");
+const msg = require("./src/routes/msg.js");
+
+const app = new Koa();
+const router = new KoaRouter();
+
+// Json Prettier Middleware
+app.use(json());
+app.use(parser());
+app.use(logger());
+
+// Simple Middleware Example
+// app.use(async ctx => (ctx.body = { msg: "Hello world" }));
+
+// Router Middleware
+router.use("/auth", auth.routes());
+router.use("/msg", msg.routes());
+router.use("/api", api.routes());
+
+app.use(router.routes()).use(router.allowedMethods());
+
+app.listen(4113, () => console.log("----------Server Started----------"));
+
+module.exports = app;
+```
+
+```js
+// auth.js
+
+const auth = require("../controllers/userController.js");
+const router = require("koa-router")();
+
+router.get("/user/:id", auth.getUserInfo);
+router.post("/login", auth.vertifyUserLogin);
+router.post("/signup", auth.signupNewUser);
+
+module.exports = router;
+```
+
+```js
+// api.js
+
+const api = require("../controllers/apiController.js");
+const router = require("koa-router")();
+
+router.get("/getbooks", api.getAllBooks);
+router.get("/getorder/:id", api.getOrderInfo);
+router.post("/searchbooks", api.searchBooks);
+router.post("/publish", api.publishNewBook);
+router.post("/confirmorder", api.updateOrderOfTrade);
+
+module.exports = router;
+```
+
+```js
+// msg.js
+
+const msg = require("../controllers/msgController.js");
+const router = require("koa-router")();
+
+router.get("/getcomments", msg.getAllComments);
+router.post("/newcomment", msg.publishNewComment);
+
+module.exports = router;
+```
+
+## 项目成果
 
 #### 登录注册
 
@@ -735,6 +1053,48 @@ Bookizilla能够实现用户注册、用户登录功能，其中对用户注册�
 
 ![1561970436476](assets/1561970436476.png)
 
+![1561972776319](assets/1561972776319.png)
+
 **Signup.jsx**
 
 ![1561971875221](assets/1561971875221.png)
+
+![1561972744681](assets/1561972744681.png)
+
+#### 个人主页
+
+Bookiezilla的主页呈现的是与该用户有关的信息数据（如FAVES、VIEWS等，但由于目前后端并未储存相关数据所以暂用了mocks）及该用户所发布的所有书籍。
+
+**Home.jsx**
+
+![1561972875578](assets/1561972875578.png)
+
+#### 书籍市场
+
+Bookiezilla的书籍市场呈现了所有用户发布的所有书籍，用户可以使用上方的搜索框输入关键词（如书名、标签 、ISBN等）。用户还可点击图书下方按钮以查看具体信息，进而决定是否达成交易，也可点击链接在Amazon中查看书籍的详细介绍。
+
+**Market.jsx**
+
+![1561973962198](assets/1561973962198.png)
+
+![1561974279890](assets/1561974279890.png)
+
+![1561974222054](assets/1561974222054.png)
+
+#### 书籍发布
+
+Bookiezilla允许用户发布书籍，并设置订单的关键信息（如书籍基本信息、交易模式、寻求买家或卖家等）。需要注意的是，由于书籍发布和书籍求购很大一部分内容是重合的，所以此处将二者合并并且给出`TradeParty`选项来使用户选择是想要发布书籍还是求购书籍。
+
+**Publish.jsx**
+
+![1561973513473](assets/1561973513473.png)
+
+![1561973494678](assets/1561973494678.png)
+
+#### 信息发布
+
+Bookiezilla设置了信息发布面板，用于用户之间的沟通交流、信息发布等。用户可直接发布评论或回复他人的评论，从而进行持续性的交流。
+
+**Message.jsx**
+
+![1561974428691](assets/1561974428691.png)

@@ -97,9 +97,12 @@ class FeedBack extends Component {
       <div>No comments yet</div>
     );
     return (
-      <Card style={{ width: cardWidth, display: "flex" }}>
+      <Card style={{ width: cardWidth }}>
         <Card.Content>
-          <Comment.Group>
+          <Comment.Group
+            center
+            style={{ width: cardWidth, justifyContent: "center" }}
+          >
             <Header as="h3">Comments</Header>
             {commentList}
             <Form reply>
