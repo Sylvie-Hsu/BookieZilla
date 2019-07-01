@@ -1,15 +1,28 @@
 import React, { Component } from "react";
-import {
-  Feed,
-  Icon,
-  Card,
-  Button,
-  Comment,
-  Form,
-  Header
-} from "semantic-ui-react";
+import { Card, Button, Comment, Form, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
 import axios from "axios";
+
+const Avatar = [
+  {
+    src: "https://react.semantic-ui.com/images/avatar/small/matthew.png"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/small/elliot.jpg"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/small/helen.jpg"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/small/jenny.jpg"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/small/joe.jpg"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/small/laura.jpg"
+  }
+];
 
 class FeedBack extends Component {
   state = {
@@ -53,13 +66,18 @@ class FeedBack extends Component {
       });
   };
 
+  chooseAvatar = id => {
+    var index = id % 6;
+    return Avatar[index].src;
+  };
+
   render() {
     var cardWidth = document.body.clientWidth - 170;
     const commentList = this.state.comments.length ? (
       this.state.comments.map(comment => {
         return (
           <Comment>
-            <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/elliot.jpg" />
+            <Comment.Avatar src={this.chooseAvatar(comment.UserID)} />
             <Comment.Content>
               <Comment.Author as="a">{comment.UserName}</Comment.Author>
               <Comment.Metadata>

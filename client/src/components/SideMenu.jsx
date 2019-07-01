@@ -1,10 +1,38 @@
 import React, { Component } from "react";
 import { Header, Icon, Image, Menu, Sidebar } from "semantic-ui-react";
 import Logo from "../images/matthew.png";
+import { connect } from "react-redux";
 import { NavLink, withRouter } from "react-router-dom";
+
+const Avatar = [
+  {
+    src: "https://react.semantic-ui.com/images/avatar/large/matthew.png"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/large/elliot.jpg"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/large/helen.jpg"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/large/jenny.jpg"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/large/joe.jpg"
+  },
+  {
+    src: "https://react.semantic-ui.com/images/avatar/large/laura.jpg"
+  }
+];
 
 class SideMenu extends Component {
   state = {};
+
+  chooseAvatar = id => {
+    var index = id % 6;
+    return Avatar[index].src;
+  };
+
   render() {
     return (
       <Sidebar
@@ -17,7 +45,7 @@ class SideMenu extends Component {
         width="thin"
       >
         <div style={{ margin: "40px 20px 80px 20px" }}>
-          <Image src={Logo} circular small />
+          <Image src={this.chooseAvatar(this.props.id)} circular small />
           <Header as="h2" style={{ color: "white" }}>
             B::kieZilla
           </Header>
@@ -51,4 +79,11 @@ class SideMenu extends Component {
   }
 }
 
-export default withRouter(SideMenu);
+const mapStateToProps = state => {
+  return {
+    id: state.id,
+    token: state.token
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(SideMenu));
