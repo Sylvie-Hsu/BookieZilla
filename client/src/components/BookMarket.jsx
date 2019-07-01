@@ -11,10 +11,6 @@ import {
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const paragraph = (
-  <Image src="https://react.semantic-ui.com/images/wireframe/short-paragraph.png" />
-);
-
 class BookMarket extends Component {
   state = {
     books: [],

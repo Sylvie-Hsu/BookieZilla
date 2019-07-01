@@ -1,120 +1,117 @@
 import React, { Component } from "react";
-import { Feed, Icon, Card } from "semantic-ui-react";
+import {
+  Feed,
+  Icon,
+  Card,
+  Button,
+  Comment,
+  Form,
+  Header
+} from "semantic-ui-react";
+import { connect } from "react-redux";
+import axios from "axios";
 
 class FeedBack extends Component {
-  state = {};
+  state = {
+    Content: "",
+    ReplyID: null,
+    comments: []
+  };
+
+  componentDidMount() {
+    axios
+      .get("/msg/getcomments")
+      .then(res => {
+        console.log(res.data);
+        this.setState({
+          comments: res.data
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  publishComment = () => {
+    var date = new Date();
+    var data = {
+      UserID: this.props.id,
+      ReplyID: this.state.ReplyID,
+      Content: this.state.Content,
+      Time: date.toLocaleString("chinese", { hour12: false })
+    };
+    axios
+      .post("/msg/newcomment", data)
+      .then(res => {
+        console.log(res.data);
+        this.setState({
+          comments: res.data
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
     var cardWidth = document.body.clientWidth - 170;
+    const commentList = this.state.comments.length ? (
+      this.state.comments.map(comment => {
+        return (
+          <Comment>
+            <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/elliot.jpg" />
+            <Comment.Content>
+              <Comment.Author as="a">{comment.UserName}</Comment.Author>
+              <Comment.Metadata>
+                <div>{comment.Time}</div>
+              </Comment.Metadata>
+              <Comment.Text>
+                <p>{comment.Content}</p>
+              </Comment.Text>
+              <Comment.Actions>
+                <Comment.Action>Reply</Comment.Action>
+              </Comment.Actions>
+            </Comment.Content>
+          </Comment>
+        );
+      })
+    ) : (
+      <div>No comments yet</div>
+    );
     return (
       <Card style={{ width: cardWidth, display: "flex" }}>
         <Card.Content>
-          <Card.Header as="h1">New Updates</Card.Header>
-          <Feed>
-            <Feed.Event>
-              <Feed.Label>
-                <img src="https://react.semantic-ui.com/images/avatar/small/elliot.jpg" />
-              </Feed.Label>
-              <Feed.Content>
-                <Feed.Summary>
-                  <Feed.User>Elliot Fu</Feed.User> added you as a friend
-                  <Feed.Date>1 Hour Ago</Feed.Date>
-                </Feed.Summary>
-                <Feed.Meta>
-                  <Feed.Like>
-                    <Icon name="like" />4 Likes
-                  </Feed.Like>
-                </Feed.Meta>
-              </Feed.Content>
-            </Feed.Event>
-
-            <Feed.Event>
-              <Feed.Label image="https://react.semantic-ui.com/images/avatar/small/helen.jpg" />
-              <Feed.Content>
-                <Feed.Summary>
-                  <a>Helen Troy</a> added <a>2 new illustrations</a>
-                  <Feed.Date>4 days ago</Feed.Date>
-                </Feed.Summary>
-                <Feed.Extra images>
-                  <a>
-                    <img src="https://react.semantic-ui.com/images/wireframe/image.png" />
-                  </a>
-                  <a>
-                    <img src="https://react.semantic-ui.com/images/wireframe/image.png" />
-                  </a>
-                </Feed.Extra>
-                <Feed.Meta>
-                  <Feed.Like>
-                    <Icon name="like" />1 Like
-                  </Feed.Like>
-                </Feed.Meta>
-              </Feed.Content>
-            </Feed.Event>
-
-            <Feed.Event>
-              <Feed.Label image="https://react.semantic-ui.com/images/avatar/small/jenny.jpg" />
-              <Feed.Content>
-                <Feed.Summary
-                  date="2 Days Ago"
-                  user="Jenny Hess"
-                  content="add you as a friend"
-                />
-                <Feed.Meta>
-                  <Feed.Like>
-                    <Icon name="like" />8 Likes
-                  </Feed.Like>
-                </Feed.Meta>
-              </Feed.Content>
-            </Feed.Event>
-
-            <Feed.Event>
-              <Feed.Label image="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
-              <Feed.Content>
-                <Feed.Summary>
-                  <a>Joe Henderson</a> posted on his page
-                  <Feed.Date>3 days ago</Feed.Date>
-                </Feed.Summary>
-                <Feed.Extra text>
-                  Ours is a life of constant reruns. We're always circling back
-                  to where we'd we started, then starting all over again. Even
-                  if we don't run extra laps that day, we surely will come back
-                  for more of the same another day soon.
-                </Feed.Extra>
-                <Feed.Meta>
-                  <Feed.Like>
-                    <Icon name="like" />5 Likes
-                  </Feed.Like>
-                </Feed.Meta>
-              </Feed.Content>
-            </Feed.Event>
-
-            <Feed.Event>
-              <Feed.Label image="https://react.semantic-ui.com/images/avatar/small/justen.jpg" />
-              <Feed.Content>
-                <Feed.Summary>
-                  <a>Justen Kitsune</a> added <a>2 new photos</a> of you
-                  <Feed.Date>4 days ago</Feed.Date>
-                </Feed.Summary>
-                <Feed.Extra images>
-                  <a>
-                    <img src="https://react.semantic-ui.com/images/wireframe/image.png" />
-                  </a>
-                  <a>
-                    <img src="https://react.semantic-ui.com/images/wireframe/image.png" />
-                  </a>
-                </Feed.Extra>
-                <Feed.Meta>
-                  <Feed.Like>
-                    <Icon name="like" />
-                    41 Likes
-                  </Feed.Like>
-                </Feed.Meta>
-              </Feed.Content>
-            </Feed.Event>
-          </Feed>
+          <Comment.Group>
+            <Header as="h3">Comments</Header>
+            {commentList}
+            <Form reply>
+              <Form.TextArea
+                onChange={event => {
+                  this.setState({
+                    Content: event.target.value
+                  });
+                }}
+              />
+              <Button
+                content="Add Comment"
+                labelPosition="left"
+                icon="edit"
+                primary
+                onClick={this.publishComment}
+              />
+            </Form>
+          </Comment.Group>
         </Card.Content>
       </Card>
     );
   }
 }
 
-export default FeedBack;
+const mapStateToProps = state => {
+  return {
+    id: state.id,
+    token: state.token
+  };
+};
+
+export default connect(mapStateToProps)(FeedBack);

@@ -13,4 +13,10 @@ module.exports = function(app) {
       changeOrigin: true
     })
   );
+  app.use(
+    proxy("/msg", {
+      target: "http://localhost:4113",
+      changeOrigin: true
+    })
+  );
 };
